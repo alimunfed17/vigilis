@@ -1,0 +1,49 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Lint, type-check and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Check for large files
+        run: |
+          git ls-files -z \
+            | xargs -0 -r stat -c '%s %n' \
+            | awk '$1 > 512000 { print "::error::File larger than 500 KB: " $2; bad = 1 } END { exit bad }'
+
+      - name: Check spelling
+        run: uv run typos
+
+      - name: Check formatting
+        run: uv run ruff format --check
+
+      - name: Lint
+        run: uv run ruff check
+
+      - name: Type-check
+        run: uv run mypy vigilis tests
+
+      - name: Run tests
+        run: uv run pytest
