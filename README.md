@@ -11,7 +11,7 @@ Framework-agnostic authentication and authorization for Python.
 - **Storage-agnostic**: bring your own database or ORM through small protocols.
 - **Authentication**: passwords, tokens, and sessions.
 - **Authorization**: composable policies and role-based access control.
-- **Typed**: fully type-hinted, checked with mypy in strict mode.
+- **Typed**: fully type-hinted, checked with ty.
 - **Minimal core**: no required dependencies; integrations are optional extras.
 
 ## Installation
