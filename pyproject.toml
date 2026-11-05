@@ -28,6 +28,11 @@ Homepage = "https://github.com/alimunfed17/vigilis"
 Repository = "https://github.com/alimunfed17/vigilis"
 Issues = "https://github.com/alimunfed17/vigilis/issues"
 
+[project.optional-dependencies]
+argon2 = [
+    "argon2-cffi>=25.1.0",
+]
+
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
 build-backend = "uv_build"
@@ -37,6 +42,7 @@ module-root = ""
 
 [dependency-groups]
 dev = [
+    "argon2-cffi>=25.1.0",
     "pre-commit>=4.7.0",
     "pytest>=9.2.0",
     "ruff>=0.17.3",
