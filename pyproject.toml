@@ -61,6 +61,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = [
     "S101",     # assert is how pytest works
+    "S105",     # fake password strings in tests are fine
+    "S106",     # fake password arguments in tests are fine
     "D",        # test functions don't need docstrings
     "PLR2004",  # literal values in assertions are fine
 ]
