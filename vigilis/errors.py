@@ -10,7 +10,15 @@ class AuthenticationError(VigilisError):
 
 
 class InvalidCredentialsError(AuthenticationError):
-    """Raised when the provided credentials are invalid."""
+    """Raised when the provided credentials are invalid.
+
+    The default message is deliberately generic so it never reveals whether
+    the username or the password was wrong.
+    """
+
+    def __init__(self, message: str = "Invalid username or password.") -> None:
+        """Initialize the exception with an optional custom message."""
+        super().__init__(message)
 
 
 class UserAlreadyExistsError(VigilisError):
