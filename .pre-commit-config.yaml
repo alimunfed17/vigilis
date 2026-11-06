@@ -43,3 +43,10 @@ repos:
         types: [python]
         pass_filenames: false
         always_run: true
+
+      - id: zizmor
+        name: zizmor
+        entry: uv run zizmor --offline .github/
+        language: system
+        files: ^\.github/workflows/
+        pass_filenames: false
