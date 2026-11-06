@@ -28,6 +28,7 @@ Every commit and pull request must pass these checks:
 | Check | Tool | Command |
 |---|---|---|
 | Spelling | typos | `uv run typos` |
+| Workflow security | zizmor | `uv run zizmor --offline .github/` |
 | Formatting | ruff | `uv run ruff format --check` |
 | Linting | ruff (all rules) | `uv run ruff check` |
 | Type checking | ty | `uv run ty check` |
