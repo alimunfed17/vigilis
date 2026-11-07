@@ -126,4 +126,4 @@ Vigilis handles credentials, so changes to authentication need extra care:
 ## License
 
 By contributing, you agree that your contributions will be licensed under the
-[Apache License 2.0](LICENSE).
+[Apache License 2.0](../LICENSE)
