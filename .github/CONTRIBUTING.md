@@ -4,7 +4,7 @@ Thank you for your interest in contributing to Vigilis. This guide explains how 
 the project, the conventions the code follows, and how to submit changes.
 
 To report a security vulnerability, do not open an issue. Follow the instructions in
-[SECURITY.md](SECURITY.md) instead.
+[SECURITY.md](/.github/SECURITY.md) instead.
 
 ## Development setup
 
@@ -126,4 +126,4 @@ Vigilis handles credentials, so changes to authentication need extra care:
 ## License
 
 By contributing, you agree that your contributions will be licensed under the
-[Apache License 2.0](LICENSE).
+[Apache License 2.0](/LICENSE)
