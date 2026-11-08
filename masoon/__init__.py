@@ -1,21 +1,21 @@
-"""Vigilis: framework-agnostic authN and authZ for Python."""
+"""Masoon: framework-agnostic authN and authZ for Python."""
 
 from typing import TYPE_CHECKING
 
-from vigilis.authn.authenticator import Authenticator
-from vigilis.authn.passwords import PasswordHasher
-from vigilis.errors import (
+from masoon.authn.authenticator import Authenticator
+from masoon.authn.passwords import PasswordHasher
+from masoon.errors import (
     AuthenticationError,
     InvalidCredentialsError,
+    MasoonError,
     UserAlreadyExistsError,
-    VigilisError,
 )
-from vigilis.storage.memory import InMemoryUserStore, StoredUser
-from vigilis.storage.protocols import UserRecord, UserStore
-from vigilis.types import Identity
+from masoon.storage.memory import InMemoryUserStore, StoredUser
+from masoon.storage.protocols import UserRecord, UserStore
+from masoon.types import Identity
 
 if TYPE_CHECKING:
-    from vigilis.authn.argon2_hasher import Argon2PasswordHasher
+    from masoon.authn.argon2_hasher import Argon2PasswordHasher
 
 __all__ = [
     "Argon2PasswordHasher",
@@ -24,12 +24,12 @@ __all__ = [
     "Identity",
     "InMemoryUserStore",
     "InvalidCredentialsError",
+    "MasoonError",
     "PasswordHasher",
     "StoredUser",
     "UserAlreadyExistsError",
     "UserRecord",
     "UserStore",
-    "VigilisError",
 ]
 
 
@@ -37,15 +37,15 @@ def __getattr__(name: str) -> object:
     """Import optional components only when they are first accessed.
 
     ``Argon2PasswordHasher`` needs the optional ``argon2`` extra, so it is
-    imported lazily. This keeps ``import vigilis`` working without the extra.
+    imported lazily. This keeps ``import masoon`` working without the extra.
     """
     if name == "Argon2PasswordHasher":
         try:
-            from vigilis.authn.argon2_hasher import Argon2PasswordHasher  # noqa: PLC0415
+            from masoon.authn.argon2_hasher import Argon2PasswordHasher  # noqa: PLC0415
         except ModuleNotFoundError as error:
             msg = (
                 "Argon2PasswordHasher requires the 'argon2' extra. "
-                "Install it with: pip install 'vigilis[argon2]'"
+                "Install it with: pip install 'masoon[argon2]'"
             )
             raise ImportError(msg) from error
         return Argon2PasswordHasher

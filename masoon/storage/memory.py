@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from vigilis.errors import UserAlreadyExistsError
+from masoon.errors import UserAlreadyExistsError
 
 
 @dataclass(frozen=True, slots=True)

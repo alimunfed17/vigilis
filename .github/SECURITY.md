@@ -1,11 +1,11 @@
 # Security Policy
 
-Vigilis is an authentication and authorization library, so security issues are taken
-seriously. Thank you for helping keep Vigilis and its users safe.
+Masoon is an authentication and authorization library, so security issues are taken
+seriously. Thank you for helping keep Masoon and its users safe.
 
 ## Supported versions
 
-Vigilis is in pre-alpha. Only the latest release receives security fixes.
+Masoon is in pre-alpha. Only the latest release receives security fixes.
 
 | Version | Supported |
 |---|---|
@@ -18,7 +18,7 @@ Vigilis is in pre-alpha. Only the latest release receives security fixes.
 discussions, or pull requests.**
 
 Report them privately through GitHub's
-[private vulnerability reporting](https://github.com/alimunfed17/vigilis/security/advisories/new).
+[private vulnerability reporting](https://github.com/getmasoon/masoon/security/advisories/new).
 
 Please include as much of the following as you can:
 
@@ -47,6 +47,6 @@ Examples of issues that are in scope:
 - Weaknesses in how passwords are hashed or verified.
 - Any way to obtain another user's identity.
 
-Issues in applications built with Vigilis, or in third-party dependencies, should be
-reported to those projects. If a dependency issue affects Vigilis directly, please let us
+Issues in applications built with Masoon, or in third-party dependencies, should be
+reported to those projects. If a dependency issue affects Masoon directly, please let us
 know as well.

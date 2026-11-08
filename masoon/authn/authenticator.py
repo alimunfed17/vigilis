@@ -2,10 +2,10 @@
 
 import secrets
 
-from vigilis.authn.passwords import PasswordHasher
-from vigilis.errors import InvalidCredentialsError
-from vigilis.storage.protocols import UserStore
-from vigilis.types import Identity
+from masoon.authn.passwords import PasswordHasher
+from masoon.errors import InvalidCredentialsError
+from masoon.storage.protocols import UserStore
+from masoon.types import Identity
 
 
 class Authenticator:

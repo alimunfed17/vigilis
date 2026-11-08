@@ -1,4 +1,4 @@
-"""Define shared types used throughout Vigilis."""
+"""Define shared types used throughout Masoon."""
 
 from dataclasses import dataclass
 

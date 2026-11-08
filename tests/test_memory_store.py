@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from vigilis.errors import UserAlreadyExistsError
-from vigilis.storage.memory import InMemoryUserStore, StoredUser
+from masoon.errors import UserAlreadyExistsError
+from masoon.storage.memory import InMemoryUserStore, StoredUser
 
 if TYPE_CHECKING:
-    from vigilis.storage.protocols import UserStore
+    from masoon.storage.protocols import UserStore
 
 
 def test_add_and_get_user() -> None:

@@ -1,14 +1,14 @@
-from vigilis.errors import (
+from masoon.errors import (
     AuthenticationError,
     InvalidCredentialsError,
+    MasoonError,
     UserAlreadyExistsError,
-    VigilisError,
 )
 
 
 def test_invalid_credentials_error_inheritance() -> None:
     assert issubclass(InvalidCredentialsError, AuthenticationError)
-    assert issubclass(InvalidCredentialsError, VigilisError)
+    assert issubclass(InvalidCredentialsError, MasoonError)
 
 
 def test_invalid_credentials_error_message() -> None:
@@ -16,11 +16,11 @@ def test_invalid_credentials_error_message() -> None:
 
     assert str(error) == "Invalid credentials"
     assert isinstance(error, AuthenticationError)
-    assert isinstance(error, VigilisError)
+    assert isinstance(error, MasoonError)
 
 
 def test_user_already_exists_error_inheritance() -> None:
-    assert issubclass(UserAlreadyExistsError, VigilisError)
+    assert issubclass(UserAlreadyExistsError, MasoonError)
 
 
 def test_user_already_exists_error() -> None:
@@ -28,4 +28,4 @@ def test_user_already_exists_error() -> None:
 
     assert str(error) == "User 'apple' already exists."
     assert error.username == "apple"
-    assert isinstance(error, VigilisError)
+    assert isinstance(error, MasoonError)

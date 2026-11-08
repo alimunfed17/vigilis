@@ -1,8 +1,8 @@
-# Vigilis
+# Masoon
 
 Framework-agnostic authentication and authorization for Python.
 
-> **Status: pre-alpha.** Vigilis is in early development. The API will change
+> **Status: pre-alpha.** Masoon is in early development. The API will change
 > and it is not ready for production use.
 
 ## Features
@@ -25,26 +25,26 @@ Framework-agnostic authentication and authorization for Python.
 
 ## Installation
 
-Vigilis requires Python 3.12 or newer. Install it with the `argon2` extra to get the
+Masoon requires Python 3.12 or newer. Install it with the `argon2` extra to get the
 built-in password hasher:
 
 ```bash
-pip install 'vigilis[argon2]'
+pip install 'masoon[argon2]'
 ```
 
 Or with uv:
 
 ```bash
-uv add 'vigilis[argon2]'
+uv add 'masoon[argon2]'
 ```
 
-Installing plain `vigilis` gives you the core only. You then need to provide your own
+Installing plain `masoon` gives you the core only. You then need to provide your own
 password hasher.
 
 ## Quick start
 
 ```python
-from vigilis import (
+from masoon import (
     Argon2PasswordHasher,
     Authenticator,
     InMemoryUserStore,
@@ -126,14 +126,14 @@ authenticator = Authenticator(store=DatabaseUserStore(connection), hasher=hasher
 
 ## Errors
 
-All exceptions raised by Vigilis inherit from `VigilisError`.
+All exceptions raised by Masoon inherit from `MasoonError`.
 
 | Exception | Raised when |
 |---|---|
 | `InvalidCredentialsError` | The username does not exist or the password is wrong. |
 | `UserAlreadyExistsError` | A user is added to `InMemoryUserStore` with a username that is already taken. |
 | `AuthenticationError` | Base class for all authentication errors. |
-| `VigilisError` | Base class for every Vigilis error. |
+| `MasoonError` | Base class for every Masoon error. |
 
 ## License
 

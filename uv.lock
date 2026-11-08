@@ -413,7 +413,7 @@ wheels = [
 ]
 
 [[package]]
-name = "vigilis"
+name = "masoon"
 version = "0.1.0"
 source = { editable = "." }
 

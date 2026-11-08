@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 import pytest
 from argon2.exceptions import InvalidHashError
 
-from vigilis.authn.argon2_hasher import Argon2PasswordHasher
+from masoon.authn.argon2_hasher import Argon2PasswordHasher
 
 if TYPE_CHECKING:
-    from vigilis.authn.passwords import PasswordHasher
+    from masoon.authn.passwords import PasswordHasher
 
 
 def test_correct_password() -> None:

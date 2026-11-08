@@ -2,7 +2,7 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from vigilis.types import Identity
+from masoon.types import Identity
 
 
 def test_identity_fields() -> None:

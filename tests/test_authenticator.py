@@ -1,10 +1,10 @@
 import pytest
 
-from vigilis.authn.argon2_hasher import Argon2PasswordHasher
-from vigilis.authn.authenticator import Authenticator
-from vigilis.errors import InvalidCredentialsError
-from vigilis.storage.memory import InMemoryUserStore, StoredUser
-from vigilis.types import Identity
+from masoon.authn.argon2_hasher import Argon2PasswordHasher
+from masoon.authn.authenticator import Authenticator
+from masoon.errors import InvalidCredentialsError
+from masoon.storage.memory import InMemoryUserStore, StoredUser
+from masoon.types import Identity
 
 
 class CountingHasher:

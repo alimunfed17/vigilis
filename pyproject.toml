@@ -1,5 +1,5 @@
 [project]
-name = "vigilis"
+name = "masoon"
 version = "0.1.0"
 description = "Framework-agnostic authentication and authorization for Python."
 readme = "README.md"
@@ -24,9 +24,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/alimunfed17/vigilis"
-Repository = "https://github.com/alimunfed17/vigilis"
-Issues = "https://github.com/alimunfed17/vigilis/issues"
+Homepage = "https://github.com/getmasoon/masoon"
+Repository = "https://github.com/getmasoon/masoon"
+Issues = "https://github.com/getmasoon/masoon/issues"
 
 [project.optional-dependencies]
 argon2 = [
@@ -78,7 +78,7 @@ ignore = [
 python-version = "3.12"
 
 [tool.ty.src]
-include = ["vigilis", "tests"]
+include = ["masoon", "tests"]
 
 [tool.ty.terminal]
 error-on-warning = true

@@ -1,6 +1,6 @@
 """Provide a password hasher backed by Argon2.
 
-Requires the optional ``argon2`` extra: ``pip install vigilis[argon2]``.
+Requires the optional ``argon2`` extra: ``pip install masoon[argon2]``.
 """
 
 from argon2 import PasswordHasher as Argon2Hasher

@@ -1,11 +1,11 @@
-"""Define exceptions raised by Vigilis."""
+"""Define exceptions raised by Masoon."""
 
 
-class VigilisError(Exception):
-    """Base exception for all Vigilis-related errors."""
+class MasoonError(Exception):
+    """Base exception for all Masoon-related errors."""
 
 
-class AuthenticationError(VigilisError):
+class AuthenticationError(MasoonError):
     """Base exception for authentication-related errors."""
 
 
@@ -21,7 +21,7 @@ class InvalidCredentialsError(AuthenticationError):
         super().__init__(message)
 
 
-class UserAlreadyExistsError(VigilisError):
+class UserAlreadyExistsError(MasoonError):
     """Raised when a user with the given username already exists."""
 
     def __init__(self, username: str) -> None:

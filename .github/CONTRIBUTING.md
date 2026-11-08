@@ -1,6 +1,6 @@
-# Contributing to Vigilis
+# Contributing to Masoon
 
-Thank you for your interest in contributing to Vigilis. This guide explains how to set up
+Thank you for your interest in contributing to Masoon. This guide explains how to set up
 the project, the conventions the code follows, and how to submit changes.
 
 To report a security vulnerability, do not open an issue. Follow the instructions in
@@ -8,17 +8,17 @@ To report a security vulnerability, do not open an issue. Follow the instruction
 
 ## Development setup
 
-Vigilis uses [uv](https://docs.astral.sh/uv/) to manage dependencies and requires
+Masoon uses [uv](https://docs.astral.sh/uv/) to manage dependencies and requires
 Python 3.12 or newer.
 
 ```bash
-git clone https://github.com/alimunfed17/vigilis.git
-cd vigilis
+git clone https://github.com/getmasoon/masoon.git
+cd masoon
 uv sync
 uv run pre-commit install
 ```
 
-`uv sync` installs Vigilis and all development tools. `pre-commit install` sets up a git
+`uv sync` installs Masoon and all development tools. `pre-commit install` sets up a git
 hook that checks every commit.
 
 ## Checks
@@ -93,12 +93,12 @@ clearer.
 - **Document public code.** Every public module, class, and function needs a docstring.
 - **Use protocols for extension points.** Storage backends and password hashers are
   described with `typing.Protocol`, so users can plug in their own implementations without
-  inheriting from Vigilis classes.
+  inheriting from Masoon classes.
 - **Keep the core dependency-free.** Anything that needs a third-party package goes behind
-  an optional extra and must not be imported by `import vigilis`.
+  an optional extra and must not be imported by `import masoon`.
 - **Use keyword arguments** when calling functions that take several values of the same
   type, such as `verify_password(password=..., hashed_password=...)`.
-- **Raise specific exceptions** that inherit from `VigilisError`.
+- **Raise specific exceptions** that inherit from `MasoonError`.
 
 ## Tests
 
@@ -109,7 +109,7 @@ clearer.
 
 ## Security-sensitive changes
 
-Vigilis handles credentials, so changes to authentication need extra care:
+Masoon handles credentials, so changes to authentication need extra care:
 
 - Never log, print, or include passwords or hashes in error messages.
 - A wrong password and an unknown username must keep raising the same error and taking
