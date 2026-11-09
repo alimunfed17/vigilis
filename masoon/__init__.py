@@ -12,7 +12,7 @@ from masoon.errors import (
     UserAlreadyExistsError,
 )
 from masoon.storage.memory import InMemoryUserStore, StoredUser
-from masoon.storage.protocols import UserRecord, UserStore
+from masoon.storage.protocols import SessionRecord, SessionStore, UserRecord, UserStore
 from masoon.types import Identity
 
 if TYPE_CHECKING:
@@ -28,6 +28,8 @@ __all__ = [
     "InvalidSessionError",
     "MasoonError",
     "PasswordHasher",
+    "SessionRecord",
+    "SessionStore",
     "StoredUser",
     "UserAlreadyExistsError",
     "UserRecord",

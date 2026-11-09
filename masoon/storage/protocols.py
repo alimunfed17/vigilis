@@ -1,5 +1,6 @@
-"""Define protocols that user storage backends must implement."""
+"""Define protocols that user and session storage backends must implement."""
 
+from datetime import datetime
 from typing import Protocol
 
 
@@ -31,4 +32,56 @@ class UserStore(Protocol):
 
     def get_by_username(self, username: str) -> UserRecord | None:
         """Return the user with the given username, or None if not found."""
+        ...
+
+
+class SessionRecord(Protocol):
+    """Represent a stored session.
+
+    Implementations store only a hash of the token,
+    never the token itself.
+    """
+
+    @property
+    def token_hash(self) -> str:
+        """Return the SHA-256 hash of the session token."""
+        ...
+
+    @property
+    def user_id(self) -> str:
+        """Return the user's unique identifier."""
+        ...
+
+    @property
+    def username(self) -> str:
+        """Return the user's username."""
+        ...
+
+    @property
+    def created_at(self) -> datetime:
+        """Return when the session was created, in UTC."""
+        ...
+
+    @property
+    def expires_at(self) -> datetime:
+        """Return when the session expires, in UTC."""
+        ...
+
+
+class SessionStore(Protocol):
+    """Define a backend that stores sessions.
+
+    Methods receive token hashes, never raw tokens.
+    """
+
+    def add(self, session: SessionRecord) -> None:
+        """Store a new session."""
+        ...
+
+    def get_by_token_hash(self, token_hash: str) -> SessionRecord | None:
+        """Return the session with the given token hash, or None if not found."""
+        ...
+
+    def delete(self, token_hash: str) -> None:
+        """Delete the session with the given token hash, if it exists."""
         ...
