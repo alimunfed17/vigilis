@@ -1,6 +1,7 @@
 from masoon.errors import (
     AuthenticationError,
     InvalidCredentialsError,
+    InvalidSessionError,
     MasoonError,
     UserAlreadyExistsError,
 )
@@ -28,4 +29,17 @@ def test_user_already_exists_error() -> None:
 
     assert str(error) == "User 'apple' already exists."
     assert error.username == "apple"
+    assert isinstance(error, MasoonError)
+
+
+def test_invalid_session_error_inheritance() -> None:
+    assert issubclass(InvalidSessionError, AuthenticationError)
+    assert issubclass(InvalidSessionError, MasoonError)
+
+
+def test_invalid_session_error() -> None:
+    error = InvalidSessionError()
+
+    assert str(error) == "Invalid session."
+    assert isinstance(error, AuthenticationError)
     assert isinstance(error, MasoonError)

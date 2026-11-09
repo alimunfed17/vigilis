@@ -7,6 +7,7 @@ from masoon.authn.passwords import PasswordHasher
 from masoon.errors import (
     AuthenticationError,
     InvalidCredentialsError,
+    InvalidSessionError,
     MasoonError,
     UserAlreadyExistsError,
 )
@@ -24,6 +25,7 @@ __all__ = [
     "Identity",
     "InMemoryUserStore",
     "InvalidCredentialsError",
+    "InvalidSessionError",
     "MasoonError",
     "PasswordHasher",
     "StoredUser",
