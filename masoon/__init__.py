@@ -11,7 +11,7 @@ from masoon.errors import (
     MasoonError,
     UserAlreadyExistsError,
 )
-from masoon.storage.memory import InMemoryUserStore, StoredUser
+from masoon.storage.memory import InMemorySessionStore, InMemoryUserStore, StoredSession, StoredUser
 from masoon.storage.protocols import SessionRecord, SessionStore, UserRecord, UserStore
 from masoon.types import Identity
 
@@ -23,6 +23,7 @@ __all__ = [
     "AuthenticationError",
     "Authenticator",
     "Identity",
+    "InMemorySessionStore",
     "InMemoryUserStore",
     "InvalidCredentialsError",
     "InvalidSessionError",
@@ -30,6 +31,7 @@ __all__ = [
     "PasswordHasher",
     "SessionRecord",
     "SessionStore",
+    "StoredSession",
     "StoredUser",
     "UserAlreadyExistsError",
     "UserRecord",
