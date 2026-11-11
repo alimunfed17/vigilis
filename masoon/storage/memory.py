@@ -37,7 +37,7 @@ class InMemoryUserStore:
 
 @dataclass(frozen=True, slots=True)
 class StoredSession:
-    """Represent a session stored by an in-memory session store."""
+    """Represent a stored session record."""
 
     token_hash: str
     user_id: str

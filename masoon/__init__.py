@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from masoon.authn.authenticator import Authenticator
 from masoon.authn.passwords import PasswordHasher
+from masoon.authn.sessions import SessionManager
 from masoon.errors import (
     AuthenticationError,
     InvalidCredentialsError,
@@ -29,6 +30,7 @@ __all__ = [
     "InvalidSessionError",
     "MasoonError",
     "PasswordHasher",
+    "SessionManager",
     "SessionRecord",
     "SessionStore",
     "StoredSession",
