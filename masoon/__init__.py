@@ -4,14 +4,16 @@ from typing import TYPE_CHECKING
 
 from masoon.authn.authenticator import Authenticator
 from masoon.authn.passwords import PasswordHasher
+from masoon.authn.sessions import SessionManager
 from masoon.errors import (
     AuthenticationError,
     InvalidCredentialsError,
+    InvalidSessionError,
     MasoonError,
     UserAlreadyExistsError,
 )
-from masoon.storage.memory import InMemoryUserStore, StoredUser
-from masoon.storage.protocols import UserRecord, UserStore
+from masoon.storage.memory import InMemorySessionStore, InMemoryUserStore, StoredSession, StoredUser
+from masoon.storage.protocols import SessionRecord, SessionStore, UserRecord, UserStore
 from masoon.types import Identity
 
 if TYPE_CHECKING:
@@ -22,10 +24,16 @@ __all__ = [
     "AuthenticationError",
     "Authenticator",
     "Identity",
+    "InMemorySessionStore",
     "InMemoryUserStore",
     "InvalidCredentialsError",
+    "InvalidSessionError",
     "MasoonError",
     "PasswordHasher",
+    "SessionManager",
+    "SessionRecord",
+    "SessionStore",
+    "StoredSession",
     "StoredUser",
     "UserAlreadyExistsError",
     "UserRecord",

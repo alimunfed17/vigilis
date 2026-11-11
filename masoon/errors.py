@@ -21,6 +21,18 @@ class InvalidCredentialsError(AuthenticationError):
         super().__init__(message)
 
 
+class InvalidSessionError(AuthenticationError):
+    """Raised when a session token is invalid, expired, or revoked.
+
+    The default message is deliberately generic to avoid revealing why
+    a session token was rejected.
+    """
+
+    def __init__(self, message: str = "Invalid session.") -> None:
+        """Initialize the exception with an optional custom message."""
+        super().__init__(message)
+
+
 class UserAlreadyExistsError(MasoonError):
     """Raised when a user with the given username already exists."""
 
