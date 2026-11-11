@@ -10,6 +10,8 @@ Framework-agnostic authentication and authorization for Python.
 **Available now**
 
 - **Username and password login** with a single `Authenticator`.
+- **Session tokens**: keep users logged in, with expiry and logout. Only a hash of each
+  token is stored.
 - **Argon2 password hashing** with secure defaults (optional extra).
 - **Bring your own storage**: plug in any database or ORM by implementing a small protocol.
 - **Safe failures**: a wrong password and an unknown username raise the same error and take
@@ -19,7 +21,6 @@ Framework-agnostic authentication and authorization for Python.
 
 **Planned**
 
-- Tokens and sessions.
 - Authorization: composable policies and role-based access control.
 - Integrations for FastAPI, Django, and Flask.
 
@@ -83,6 +84,48 @@ except InvalidCredentialsError as error:
 `InMemoryUserStore` is meant for tests and examples. In a real application, connect your
 own database as shown below.
 
+## Sessions
+
+After a successful login, create a session so the user stays logged in. `SessionManager`
+returns a random token that your application sends to the client, for example in a
+cookie. On later requests, validate the token to get the user's identity back.
+
+```python
+from datetime import timedelta
+
+from masoon import InMemorySessionStore, InvalidSessionError, SessionManager
+
+sessions = SessionManager(store=InMemorySessionStore(), validity=timedelta(days=1))
+
+# Log in, then create a session for the identity.
+token = sessions.create(identity)
+
+# On each later request, validate the token sent by the client.
+identity = sessions.validate(token)
+print(identity)  # Identity(id='1', username='alice')
+
+# On logout, revoke the session. The token stops working immediately.
+sessions.revoke(token)
+
+try:
+    sessions.validate(token)
+except InvalidSessionError as error:
+    print(error)  # Invalid session.
+```
+
+How sessions work:
+
+- **The token is returned only once**, by `create`. Masoon stores a SHA-256 hash of it,
+  never the token itself, so a leaked session database cannot be used to log in.
+- **Sessions expire** after the `validity` you choose. Validating an expired token raises
+  `InvalidSessionError` and removes the session from the store.
+- **One error for every failure.** Unknown, expired, and revoked tokens all raise the same
+  `InvalidSessionError`, so the error never reveals why a token was rejected.
+- **Revoking is safe to repeat.** Revoking a token that does not exist does nothing.
+
+`InMemorySessionStore` loses all sessions when your application restarts. In a real
+application, store sessions in your own database as shown below.
+
 ## Using your own database
 
 `Authenticator` accepts any object that matches the `UserStore` protocol. There is no
@@ -124,6 +167,63 @@ Pass it to the authenticator like any other store:
 authenticator = Authenticator(store=DatabaseUserStore(connection), hasher=hasher)
 ```
 
+### Sessions in your own database
+
+`SessionManager` accepts any object that matches the `SessionStore` protocol. Your store
+needs three methods, all working with token hashes:
+
+| Method | What it does |
+|---|---|
+| `add(session)` | Save a new session. |
+| `get_by_token_hash(token_hash)` | Return the session, or `None` if it does not exist. |
+| `delete(token_hash)` | Delete the session. Do nothing if it does not exist. |
+
+A session record has five readable attributes: `token_hash`, `user_id`, and `username`
+are strings, and `created_at` and `expires_at` are timezone-aware `datetime` values in UTC.
+Masoon passes a `StoredSession` to `add`, which you can store as it is.
+
+```python
+from datetime import datetime
+
+from masoon import SessionRecord, StoredSession
+
+
+class DatabaseSessionStore:
+    def __init__(self, connection) -> None:
+        self._connection = connection
+
+    def add(self, session: SessionRecord) -> None:
+        self._connection.execute(
+            "INSERT INTO sessions VALUES (?, ?, ?, ?, ?)",
+            (
+                session.token_hash,
+                session.user_id,
+                session.username,
+                session.created_at.isoformat(),
+                session.expires_at.isoformat(),
+            ),
+        )
+
+    def get_by_token_hash(self, token_hash: str) -> SessionRecord | None:
+        row = self._connection.execute(
+            "SELECT token_hash, user_id, username, created_at, expires_at"
+            " FROM sessions WHERE token_hash = ?",
+            (token_hash,),
+        ).fetchone()
+        if row is None:
+            return None
+        return StoredSession(
+            token_hash=row[0],
+            user_id=row[1],
+            username=row[2],
+            created_at=datetime.fromisoformat(row[3]),
+            expires_at=datetime.fromisoformat(row[4]),
+        )
+
+    def delete(self, token_hash: str) -> None:
+        self._connection.execute("DELETE FROM sessions WHERE token_hash = ?", (token_hash,))
+```
+
 ## Errors
 
 All exceptions raised by Masoon inherit from `MasoonError`.
@@ -131,6 +231,7 @@ All exceptions raised by Masoon inherit from `MasoonError`.
 | Exception | Raised when |
 |---|---|
 | `InvalidCredentialsError` | The username does not exist or the password is wrong. |
+| `InvalidSessionError` | A session token is unknown, expired, or revoked. |
 | `UserAlreadyExistsError` | A user is added to `InMemoryUserStore` with a username that is already taken. |
 | `AuthenticationError` | Base class for all authentication errors. |
 | `MasoonError` | Base class for every Masoon error. |
