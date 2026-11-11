@@ -202,6 +202,42 @@ wheels = [
 ]
 
 [[package]]
+name = "masoon"
+version = "0.2.0"
+source = { editable = "." }
+
+[package.optional-dependencies]
+argon2 = [
+    { name = "argon2-cffi" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "argon2-cffi" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "ruff" },
+    { name = "ty" },
+    { name = "typos" },
+    { name = "zizmor" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "argon2-cffi", marker = "extra == 'argon2'", specifier = ">=25.1.0" }]
+provides-extras = ["argon2"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "argon2-cffi", specifier = ">=25.1.0" },
+    { name = "pre-commit", specifier = ">=4.7.0" },
+    { name = "pytest", specifier = ">=9.2.0" },
+    { name = "ruff", specifier = ">=0.17.3" },
+    { name = "ty", specifier = ">=0.0.97" },
+    { name = "typos", specifier = ">=1.51.1" },
+    { name = "zizmor", specifier = ">=1.32.0" },
+]
+
+[[package]]
 name = "nodeenv"
 version = "1.12.0"
 source = { registry = "https://pypi.org/simple" }
@@ -410,42 +446,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/4f/33/61c9b7865ee1d782d1e98488176f83af94f1404aa0be4622f211d5a2252c/typos-1.51.1-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:05441c0054e6f2ff0720a92b56b39c9ff9460ea30a9baa1d30603b2b709bd59c", size = 8247232, upload-time = "2026-10-06T21:07:34.972Z" },
     { url = "https://files.pythonhosted.org/packages/43/dd/96915ab21d88c645b5e181a66d5b70950102413a9d187548f8c52b452ad2/typos-1.51.1-py3-none-win32.whl", hash = "sha256:e3600f808fdedbeef6a705abe3a31589103842635eca2130cf571c55b9ecfc61", size = 3174015, upload-time = "2026-10-06T21:07:37.088Z" },
     { url = "https://files.pythonhosted.org/packages/bb/b0/e1f67f5688324eb9d5d3c38ffedd72ae36b6a79c52bf6eeec6e1fbfd9706/typos-1.51.1-py3-none-win_amd64.whl", hash = "sha256:88b68c8f7c15b6c04f2f1a558e5fae2aa0d5e3ef46aec1a464a93498d46d99de", size = 3355358, upload-time = "2026-10-06T21:07:38.83Z" },
-]
-
-[[package]]
-name = "masoon"
-version = "0.1.0"
-source = { editable = "." }
-
-[package.optional-dependencies]
-argon2 = [
-    { name = "argon2-cffi" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "argon2-cffi" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "ruff" },
-    { name = "ty" },
-    { name = "typos" },
-    { name = "zizmor" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "argon2-cffi", marker = "extra == 'argon2'", specifier = ">=25.1.0" }]
-provides-extras = ["argon2"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "argon2-cffi", specifier = ">=25.1.0" },
-    { name = "pre-commit", specifier = ">=4.7.0" },
-    { name = "pytest", specifier = ">=9.2.0" },
-    { name = "ruff", specifier = ">=0.17.3" },
-    { name = "ty", specifier = ">=0.0.97" },
-    { name = "typos", specifier = ">=1.51.1" },
-    { name = "zizmor", specifier = ">=1.32.0" },
 ]
 
 [[package]]
