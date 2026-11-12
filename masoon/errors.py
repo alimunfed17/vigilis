@@ -5,6 +5,10 @@ class MasoonError(Exception):
     """Base exception for all Masoon-related errors."""
 
 
+class AuthorizationError(MasoonError):
+    """Base exception for authorization-related errors."""
+
+
 class AuthenticationError(MasoonError):
     """Base exception for authentication-related errors."""
 
@@ -31,6 +35,15 @@ class InvalidSessionError(AuthenticationError):
     def __init__(self, message: str = "Invalid session.") -> None:
         """Initialize the exception with an optional custom message."""
         super().__init__(message)
+
+
+class PermissionDeniedError(AuthorizationError):
+    """Raised when the required permission is not granted."""
+
+    def __init__(self, permission_name: str) -> None:
+        """Initialize the exception with the denied permission name."""
+        self.permission_name = permission_name
+        super().__init__(f"Permission denied: {permission_name}")
 
 
 class UserAlreadyExistsError(MasoonError):
