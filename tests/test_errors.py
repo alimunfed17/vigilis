@@ -1,8 +1,10 @@
 from masoon.errors import (
     AuthenticationError,
+    AuthorizationError,
     InvalidCredentialsError,
     InvalidSessionError,
     MasoonError,
+    PermissionDeniedError,
     UserAlreadyExistsError,
 )
 
@@ -42,4 +44,18 @@ def test_invalid_session_error() -> None:
 
     assert str(error) == "Invalid session."
     assert isinstance(error, AuthenticationError)
+    assert isinstance(error, MasoonError)
+
+
+def test_authorization_error_is_not_an_authentication_error() -> None:
+    assert issubclass(AuthorizationError, MasoonError)
+    assert not issubclass(AuthorizationError, AuthenticationError)
+
+
+def test_permission_denied_error() -> None:
+    error = PermissionDeniedError("posts:edit")
+
+    assert str(error) == "Permission denied: posts:edit"
+    assert error.permission_name == "posts:edit"
+    assert isinstance(error, AuthorizationError)
     assert isinstance(error, MasoonError)

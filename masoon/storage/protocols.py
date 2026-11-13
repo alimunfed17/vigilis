@@ -1,4 +1,4 @@
-"""Define protocols that user and session storage backends must implement."""
+"""Define protocols that user, session, and role storage backends must implement."""
 
 from datetime import datetime
 from typing import Protocol
@@ -84,4 +84,18 @@ class SessionStore(Protocol):
 
     def delete(self, token_hash: str) -> None:
         """Delete the session with the given token hash, if it exists."""
+        ...
+
+
+class RoleAssignmentStore(Protocol):
+    """Define a backend that records which roles are assigned to each user.
+
+    Roles themselves are defined in code. The store only keeps role names.
+    """
+
+    def get_roles(self, user_id: str) -> frozenset[str]:
+        """Return the names of the roles assigned to the user.
+
+        Return an empty set if the user has no roles.
+        """
         ...
