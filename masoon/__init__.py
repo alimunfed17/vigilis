@@ -5,16 +5,31 @@ from typing import TYPE_CHECKING
 from masoon.authn.authenticator import Authenticator
 from masoon.authn.passwords import PasswordHasher
 from masoon.authn.sessions import SessionManager
+from masoon.authz.rbac import Authorizer
 from masoon.errors import (
     AuthenticationError,
+    AuthorizationError,
     InvalidCredentialsError,
     InvalidSessionError,
     MasoonError,
+    PermissionDeniedError,
     UserAlreadyExistsError,
 )
-from masoon.storage.memory import InMemorySessionStore, InMemoryUserStore, StoredSession, StoredUser
-from masoon.storage.protocols import SessionRecord, SessionStore, UserRecord, UserStore
-from masoon.types import Identity
+from masoon.storage.memory import (
+    InMemoryRoleAssignmentStore,
+    InMemorySessionStore,
+    InMemoryUserStore,
+    StoredSession,
+    StoredUser,
+)
+from masoon.storage.protocols import (
+    RoleAssignmentStore,
+    SessionRecord,
+    SessionStore,
+    UserRecord,
+    UserStore,
+)
+from masoon.types import Identity, Role
 
 if TYPE_CHECKING:
     from masoon.authn.argon2_hasher import Argon2PasswordHasher
@@ -23,13 +38,19 @@ __all__ = [
     "Argon2PasswordHasher",
     "AuthenticationError",
     "Authenticator",
+    "AuthorizationError",
+    "Authorizer",
     "Identity",
+    "InMemoryRoleAssignmentStore",
     "InMemorySessionStore",
     "InMemoryUserStore",
     "InvalidCredentialsError",
     "InvalidSessionError",
     "MasoonError",
     "PasswordHasher",
+    "PermissionDeniedError",
+    "Role",
+    "RoleAssignmentStore",
     "SessionManager",
     "SessionRecord",
     "SessionStore",
