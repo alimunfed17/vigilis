@@ -1,4 +1,4 @@
-"""Provide in-memory user and session stores."""
+"""Provide in-memory user, session, and role assignment stores."""
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -64,3 +64,23 @@ class InMemorySessionStore:
     def delete(self, token_hash: str) -> None:
         """Delete a session if it exists."""
         self._sessions.pop(token_hash, None)
+
+
+class InMemoryRoleAssignmentStore:
+    """Store role assignments in memory, indexed by user ID."""
+
+    def __init__(self) -> None:
+        """Initialize an empty role assignment store."""
+        self._roles: dict[str, set[str]] = {}
+
+    def assign(self, user_id: str, role_name: str) -> None:
+        """Assign a role to a user. Assigning a role twice has no effect."""
+        self._roles.setdefault(user_id, set()).add(role_name)
+
+    def unassign(self, user_id: str, role_name: str) -> None:
+        """Remove a role from a user. Removing a missing role does nothing."""
+        self._roles.get(user_id, set()).discard(role_name)
+
+    def get_roles(self, user_id: str) -> frozenset[str]:
+        """Return the names of the roles assigned to the user."""
+        return frozenset(self._roles.get(user_id, set()))
