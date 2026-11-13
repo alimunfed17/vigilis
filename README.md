@@ -12,6 +12,8 @@ Framework-agnostic authentication and authorization for Python.
 - **Username and password login** with a single `Authenticator`.
 - **Session tokens**: keep users logged in, with expiry and logout. Only a hash of each
   token is stored.
+- **Role-based access control**: define roles in code, assign them to users, and check
+  permissions. Access is denied by default.
 - **Argon2 password hashing** with secure defaults (optional extra).
 - **Bring your own storage**: plug in any database or ORM by implementing a small protocol.
 - **Safe failures**: a wrong password and an unknown username raise the same error and take
@@ -21,7 +23,7 @@ Framework-agnostic authentication and authorization for Python.
 
 **Planned**
 
-- Authorization: composable policies and role-based access control.
+- Composable authorization policies.
 - Integrations for FastAPI, Django, and Flask.
 
 ## Installation
@@ -126,6 +128,58 @@ How sessions work:
 `InMemorySessionStore` loses all sessions when your application restarts. In a real
 application, store sessions in your own database as shown below.
 
+## Authorization
+
+Masoon uses role-based access control. Define roles in your code, each with a set of
+permissions, then record which roles each user has. `Authorizer` answers whether an
+identity is allowed to do something.
+
+```python
+from masoon import (
+    Authorizer,
+    Identity,
+    InMemoryRoleAssignmentStore,
+    PermissionDeniedError,
+    Role,
+)
+
+# Define roles in code. Permissions are plain strings.
+viewer = Role(name="viewer", permissions=frozenset({"posts:read"}))
+editor = Role(name="editor", permissions=frozenset({"posts:read", "posts:edit"}))
+
+# Record which roles each user has.
+assignments = InMemoryRoleAssignmentStore()
+assignments.assign(user_id="1", role_name="editor")
+
+authorizer = Authorizer(roles=[viewer, editor], assignments=assignments)
+alice = Identity(id="1", username="alice")
+
+print(authorizer.has_permission(alice, "posts:edit"))  # True
+print(authorizer.has_permission(alice, "posts:delete"))  # False
+
+# In a request handler, use require. It raises if the permission is missing.
+try:
+    authorizer.require(alice, "posts:delete")
+except PermissionDeniedError as error:
+    print(error)  # Permission denied: posts:delete
+```
+
+How authorization works:
+
+- **Access is denied by default.** A user with no roles has no permissions.
+- **Undefined roles grant nothing.** If a user is assigned a role name that your code does
+  not define, for example one you removed, it is ignored.
+- **Permissions match exactly.** `posts:edit` does not match `Posts:Edit` or `posts:*`.
+- **There is no built-in admin.** To give a user every permission, define a role that
+  lists them explicitly.
+- **Permissions from several roles combine.** A user with two roles has the permissions
+  of both.
+- **Roles cannot change after they are created.** Their permissions are always stored as
+  a `frozenset`, and two roles with the same name raise `ValueError`.
+
+`InMemoryRoleAssignmentStore` is meant for tests and examples. In a real application,
+store role assignments in your own database as shown below.
+
 ## Using your own database
 
 `Authenticator` accepts any object that matches the `UserStore` protocol. There is no
@@ -224,6 +278,26 @@ class DatabaseSessionStore:
         self._connection.execute("DELETE FROM sessions WHERE token_hash = ?", (token_hash,))
 ```
 
+### Role assignments in your own database
+
+`Authorizer` accepts any object that matches the `RoleAssignmentStore` protocol. Your
+store needs one method, `get_roles(user_id)`, which returns the names of the user's roles
+as a `frozenset` of strings, or an empty `frozenset` if the user has none. Roles
+themselves stay in your code; the database only records role names.
+
+```python
+class DatabaseRoleAssignmentStore:
+    def __init__(self, connection) -> None:
+        self._connection = connection
+
+    def get_roles(self, user_id: str) -> frozenset[str]:
+        rows = self._connection.execute(
+            "SELECT role_name FROM user_roles WHERE user_id = ?",
+            (user_id,),
+        ).fetchall()
+        return frozenset(row[0] for row in rows)
+```
+
 ## Errors
 
 All exceptions raised by Masoon inherit from `MasoonError`.
@@ -232,8 +306,10 @@ All exceptions raised by Masoon inherit from `MasoonError`.
 |---|---|
 | `InvalidCredentialsError` | The username does not exist or the password is wrong. |
 | `InvalidSessionError` | A session token is unknown, expired, or revoked. |
+| `PermissionDeniedError` | An identity does not have a required permission. The error names the permission. |
 | `UserAlreadyExistsError` | A user is added to `InMemoryUserStore` with a username that is already taken. |
 | `AuthenticationError` | Base class for all authentication errors. |
+| `AuthorizationError` | Base class for all authorization errors. |
 | `MasoonError` | Base class for every Masoon error. |
 
 ## License
