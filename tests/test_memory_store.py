@@ -5,6 +5,7 @@ import pytest
 
 from masoon.errors import UserAlreadyExistsError
 from masoon.storage.memory import (
+    InMemoryRoleAssignmentStore,
     InMemorySessionStore,
     InMemoryUserStore,
     StoredSession,
@@ -12,7 +13,12 @@ from masoon.storage.memory import (
 )
 
 if TYPE_CHECKING:
-    from masoon.storage.protocols import SessionRecord, SessionStore, UserStore
+    from masoon.storage.protocols import (
+        RoleAssignmentStore,
+        SessionRecord,
+        SessionStore,
+        UserStore,
+    )
 
 
 @pytest.fixture
@@ -110,3 +116,54 @@ def test_stored_session_implements_session_record_protocol(
     record: SessionRecord = session
 
     assert record.username == "apple"
+
+
+def test_user_without_roles_has_empty_roles() -> None:
+    store = InMemoryRoleAssignmentStore()
+
+    assert store.get_roles("1") == frozenset()
+
+
+def test_assign_roles() -> None:
+    store = InMemoryRoleAssignmentStore()
+    store.assign("1", "editor")
+    store.assign("1", "viewer")
+
+    assert store.get_roles("1") == frozenset({"editor", "viewer"})
+
+
+def test_assign_same_role_twice() -> None:
+    store = InMemoryRoleAssignmentStore()
+    store.assign("1", "editor")
+    store.assign("1", "editor")
+
+    assert store.get_roles("1") == frozenset({"editor"})
+
+
+def test_roles_are_per_user() -> None:
+    store = InMemoryRoleAssignmentStore()
+    store.assign("1", "editor")
+
+    assert store.get_roles("2") == frozenset()
+
+
+def test_unassign_role() -> None:
+    store = InMemoryRoleAssignmentStore()
+    store.assign("1", "editor")
+    store.unassign("1", "editor")
+
+    assert store.get_roles("1") == frozenset()
+
+
+def test_unassign_missing_role_does_not_raise() -> None:
+    store = InMemoryRoleAssignmentStore()
+
+    store.unassign("1", "editor")
+
+    assert store.get_roles("1") == frozenset()
+
+
+def test_in_memory_role_store_implements_role_assignment_store_protocol() -> None:
+    store: RoleAssignmentStore = InMemoryRoleAssignmentStore()
+
+    assert store.get_roles("1") == frozenset()
